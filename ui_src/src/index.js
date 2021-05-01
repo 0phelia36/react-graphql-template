@@ -1,12 +1,27 @@
-import React from 'react'
+import React, {useState} from 'react'
 import ReactDOM from 'react-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
+import { rsmConnectApp } from './holochainClient'
 import apolloClient from './apolloClient'
 import './index.css'
 import NotesHApp from './NotesHApp'
 import * as serviceWorker from './serviceWorker'
 
+
 function HApp () {
+  const [connected, setConnected] = useState(false);
+
+  rsmConnectApp().then( async (cellId) => {
+    setConnected(true)
+    console.log("Connected!")
+  }
+  )
+
+  console.log("connection Status ", connected)
+  if (!connected) {
+    console.log("not connected ", connected)
+    return <div>Connecting...</div>
+  }
   return <ApolloProvider client={apolloClient}>
     <NotesHApp />
   </ApolloProvider>

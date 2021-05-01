@@ -9,11 +9,14 @@ function dnaToUiNote (noteResult) {
 
 export const resolvers = {
   Query: {
+    getExampleNote: async () =>{ console.log("getExampleNote resolver")
+      return await createZomeCall('/notes/notes/get_book')},
+
     getNote: async (_, { id }) =>
-      dnaToUiNote(await createZomeCall('/notes/notes/get_note')({ id })),
+      dnaToUiNote(await createZomeCall('/notes/notes/get_note')),
 
     listNotes: async () =>
-      (await createZomeCall('/notes/notes/list_notes')()).map(dnaToUiNote)
+      (await createZomeCall('/notes/notes/list_notes'))
   },
 
   Mutation: {

@@ -8,6 +8,10 @@ type Note {
   title: String
   content: String
 }
+type Thing {
+  title: String
+  content: String
+}
 
 input NoteInput {
   title: String
@@ -17,6 +21,7 @@ input NoteInput {
 type Query {
   getNote(id: String): Note
   listNotes: [Note]
+  getExampleNote: Thing
 }
 
 type Mutation {

@@ -6,18 +6,11 @@ const client = new net.Socket()
 
 let startedConductor = false
 const tryConnection = () => {
-  client.connect(
-    { port },
-    () => {
-      client.end()
-      if (!startedConductor) {
         console.log('starting ui, connect to:' + port)
         startedConductor = true
         const exec = childProcess.exec
         exec('yarn start:live')
-      }
-    }
-  )
+  
 }
 
 tryConnection()

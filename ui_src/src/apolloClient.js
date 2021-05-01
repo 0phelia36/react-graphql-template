@@ -9,7 +9,7 @@ import typeDefs from './schema'
 import resolvers from './resolvers'
 
 const schemaLink = new SchemaLink({ schema: makeExecutableSchema({ typeDefs, resolvers }) })
-
+console.log(schemaLink.schema)
 var links = [schemaLink]
 
 if (process.env.NODE_ENV !== 'test') {

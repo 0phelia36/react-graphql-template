@@ -34,3 +34,6 @@ target/
 
 conductor-config.toml
 keystore/*
+
+*.dna
+*.happ

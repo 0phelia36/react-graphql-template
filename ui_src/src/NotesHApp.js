@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { pick } from 'lodash/fp'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import LIST_NOTES_QUERY from './graphql/listNotesQuery'
+import EXAMPLE_QUERY from './graphql/getExampleNote'
 import CREATE_NOTE_MUTATION from './graphql/createNoteMutation'
 import UPDATE_NOTE_MUTATION from './graphql/updateNoteMutation'
 import REMOVE_NOTE_MUTATION from './graphql/removeNoteMutation'
@@ -9,8 +10,9 @@ import REMOVE_NOTE_MUTATION from './graphql/removeNoteMutation'
 import './NotesHApp.css'
 
 function NotesHApp () {
+  const { data, refetch } = useQuery(EXAMPLE_QUERY)
   const { data: { listNotes } = { listNotes: [] } } = useQuery(LIST_NOTES_QUERY)
-
+  console.log("AAA", data)
   const [createNote] = useMutation(CREATE_NOTE_MUTATION, { refetchQueries: [{ query: LIST_NOTES_QUERY }] })
   const [updateNote] = useMutation(UPDATE_NOTE_MUTATION)
   const [removeNote] = useMutation(REMOVE_NOTE_MUTATION, { refetchQueries: [{ query: LIST_NOTES_QUERY }] })
@@ -22,9 +24,10 @@ function NotesHApp () {
     <h1>Notes hApp</h1>
 
     <NoteForm
-      formAction={({ noteInput }) => createNote({ variables: { noteInput } })}
+      formAction={({ noteInput }) => refetch()}
       formTitle='Create Note' />
-
+  {JSON.stringify(listNotes)}
+  {JSON.stringify(data)}
     <div className='note-list'>
       {listNotes.map(note =>
         <NoteRow

@@ -28,10 +28,19 @@ pub fn add_book(input: SomeExternalInput) -> ExternResult<EntryHashB64> {
 }
 
 #[hdk_extern]
-pub fn get_book(hash: EntryHashB64) -> ExternResult<Book> {
-    let element: Element = get(EntryHash::from(hash), GetOptions::default())?
-        .ok_or(WasmError::Guest(String::from("Could not find book")))?;
-    let bookoption: Option<Book> = element.entry().to_app_option()?;
-    let book: Book = bookoption.unwrap();
-    Ok(book)
+pub fn get_book(_hash: String) -> ExternResult<Book> {
+    // let element: Element = get(EntryHash::from(hash), GetOptions::default())?
+    //     .ok_or(WasmError::Guest(String::from("Could not find book")))?;
+    // let bookoption: Option<Book> = element.entry().to_app_option()?;
+    // let book: Book = bookoption.unwrap();
+    Ok(Book {title: "a".to_string(), content: "b".to_string()})
+}
+
+#[hdk_extern]
+pub fn list_notes(_hash: String) -> ExternResult<Vec<Book>> {
+    // let element: Element = get(EntryHash::from(hash), GetOptions::default())?
+    //     .ok_or(WasmError::Guest(String::from("Could not find book")))?;
+    // let bookoption: Option<Book> = element.entry().to_app_option()?;
+    // let book: Book = bookoption.unwrap();
+    Ok(vec![Book {title: "a".to_string(), content: "b".to_string()}])
 }

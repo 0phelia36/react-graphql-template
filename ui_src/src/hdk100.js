@@ -1,12 +1,13 @@
 
 import { AdminWebsocket, AppWebsocket } from '@holochain/conductor-api';
+import { htos } from './utils';
 
 const DEFAULT_TIMEOUT = 9999
 
 const HREF_PORT = window.location.port
 var ADMIN_PORT = 1234
-var APP_ID = 'hashes'
-var APP_PORT = 8080 + 800
+var APP_ID = 'snapmail-app'
+var APP_PORT = parseInt(HREF_PORT) + 800
 export var NETWORK_ID = ''
 
 // No HREF PORT when run by Electron
@@ -113,6 +114,7 @@ const dumpState = async (cellId) => {
   console.log({stateDump})
 }
 
+
 /**
  *
  * @returns {Promise<any>}
@@ -130,7 +132,7 @@ export async function callDna(functionName, payload, timeout) {
     result = await g_appClient.callZome({
         cap: null,
         cell_id: g_cellId,
-        zome_name: "exercise",
+        zome_name: "snapmail",
         fn_name: functionName,
         provenance: g_cellId[1],
         payload: payload
@@ -173,6 +175,16 @@ export function getAllHandles(callback) {
 
 export function findAgent(handle, callback) {
   callDna('find_agent', handle).then(result => callback(result));
+}
+
+export function pingAgent(agentHash, callback) {
+  console.log('*** pingAgent() called for: ' + htos(agentHash));
+  callDna('ping_agent', agentHash, 2000)
+    .then(result => callback(result))
+    .catch(error => {
+      console.log('Ping failed for: ' + htos(agentHash));
+      callback(undefined);
+    });
 }
 
 // -- Mail -- //
@@ -261,19 +273,4 @@ export function getAllManifests(callback, signalCallback) {
 
 export function getMissingAttachments(from, inMailAddress, callback, signalCallback) {
   callDna('get_missing_attachments', {from, inmail_address: inMailAddress}, signalCallback).then(result => callback(result));
-}
-
-
-export function parseZomeCallPath (zomeCallPath) {
-  const [zomeFunc, zome, instanceId] = zomeCallPath.split('/').reverse()
-
-  return { instanceId, zome, zomeFunc }
-}
-
-export function createZomeCall (zomeCallPath, callOpts = {}) {
-  const { instanceId, zome, zomeFunc } = parseZomeCallPath(zomeCallPath)
-  console.log('get_book', instanceId, zome, zomeFunc)
-  // if (zomeFunc === "get_book") {
-    return callDna(zomeFunc, "asd")
-  // }
 }
