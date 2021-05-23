@@ -13,7 +13,6 @@
     "hc:start": "npm run sandbox-create && concurrently \"npm:ui:start\" \"npm run sandbox-run\"",
     "sandbox-create": "rm -rf ~/tmp && mkdir ~/tmp && hc s clean && hc s create --root ~/tmp/ -n 3 network -b https://bootstrap-staging.holo.host/ quic && hc s call 0 1 2 install-app-bundle ./dna_src/zomes/1.hashes/hashes.happ",
     "sandbox-run": "WASM_LOG=debug RUST_LOG=warn hc s run --all -p 8880 8881 8882",
-    "ui:connect-to-conductor": "cd ui_src && node connect-to-conductor",
     "ui:start": "cd ui_src && yarn start:live",
     "start": "nf start"
   },

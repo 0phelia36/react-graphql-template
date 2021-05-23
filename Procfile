@@ -1,2 +1,2 @@
 holochain: npm run hc:start
-react: yarn ui:connect-to-conductor
+react: yarn ui:start
