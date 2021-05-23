@@ -4,7 +4,7 @@ import path from "path";
 const conductorConfig = Config.gen();
 
 // Construct proper paths for your DNAs
-const exercise = path.join(__dirname, "../../notes.dna");
+const notes = path.join(__dirname, "../../notes.dna");
 
 // create an InstallAgentsHapps array with your DNAs to tell tryorama what
 // to install into the conductor.
@@ -12,7 +12,7 @@ const installation: InstallAgentsHapps = [
   // agent 0
   [
     // happ 0
-    [exercise],
+    [notes],
   ],
 ];
 
@@ -31,7 +31,7 @@ orchestrator.registerScenario(
     const [[alice_common]] = await alice.installAgentsHapps(installation);
 
     let entryHash = await alice_common.cells[0].call(
-      "exercise",
+      "notes",
       "create_note",
       {
         title: "Sovereign Accountable Commons",
@@ -43,7 +43,7 @@ orchestrator.registerScenario(
       
     // add your test here
     let notes = await alice_common.cells[0].call(
-      "exercise", // name of zome
+      "notes", // name of zome
       "list_notes", // function to call
       undefined
     );

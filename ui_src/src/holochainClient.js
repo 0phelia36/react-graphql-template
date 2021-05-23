@@ -130,7 +130,7 @@ export async function callDna(functionName, payload, timeout) {
     result = await g_appClient.callZome({
         cap: null,
         cell_id: g_cellId,
-        zome_name: "exercise",
+        zome_name: "notes",
         fn_name: functionName,
         provenance: g_cellId[1],
         payload: payload
