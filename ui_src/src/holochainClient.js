@@ -28,18 +28,6 @@ var g_cellId = undefined
 var g_appClient = undefined
 
 /**
- * Default signal callback
- */
-var receiveSignal = (signal/*: AppSignal*/) => {
-  // impl...
-  console.log('Received signal:')
-  console.log({signal})
-  //resolve()
-}
-
-// -- micro API -- //
-
-/**
  *
  */
 export async function rsmConnectAdmin() {
@@ -117,7 +105,7 @@ const dumpState = async (cellId) => {
  *
  * @returns {Promise<any>}
  */
-export async function callDna(functionName, payload, timeout) {
+export async function callDna(zomeName, functionName, payload, timeout) {
     if (g_appClient === undefined) {
       console.error("App Client Websocket not connected!")
       return Promise.reject("App Client Websocket not connected!")
@@ -130,7 +118,7 @@ export async function callDna(functionName, payload, timeout) {
     result = await g_appClient.callZome({
         cap: null,
         cell_id: g_cellId,
-        zome_name: "notes",
+        zome_name: zomeName,
         fn_name: functionName,
         provenance: g_cellId[1],
         payload: payload
@@ -149,121 +137,6 @@ export async function callDna(functionName, payload, timeout) {
   return result;
 }
 
-// -- Handle -- //
-
-export function getMyHandle(callback) {
-  callDna('get_my_handle', null).then(result => callback(result));
-}
-
-export function getHandle(agentId, callback) {
-  callDna('get_handle', {agentId: agentId}).then(result => callback(result));
-}
-
-export function setHandle(username, callback) {
-  callDna('set_handle', username).then(result => callback(result));
-}
-
-export function getAllHandles(callback) {
-  callDna('get_all_handles', null)
-    .then(result => callback(result))
-    .catch(error => {
-      callback(undefined);
-    });
-}
-
-export function findAgent(handle, callback) {
-  callDna('find_agent', handle).then(result => callback(result));
-}
-
-// -- Mail -- //
-
-export function sendMail(mail, callback) {
-  callDna('send_mail', {subject: mail.subject, payload: mail.payload, to: mail.to, cc: mail.cc, bcc: mail.bcc, manifest_address_list: mail.manifest_address_list}).then(result => callback(result));
-}
-
-export function getMail(otherAgentId, callback) {
-  callDna('get_mail', otherAgentId).then(result => callback(result));
-}
-
-export function deleteMail(mailAddress, callback) {
-  callDna('delete_mail', mailAddress).then(result => callback(result));
-}
-
-export function getAllArrivedMail(callback) {
-  callDna('get_all_arrived_mail', undefined).then(result => callback(result));
-}
-
-export function getAllMails(callback, afterCallback) {
-  callDna('get_all_mails', undefined)
-    .then(result => {callback(result); afterCallback();})
-    .catch(error => {
-      console.log('getAllMails failed: ' + error);
-      callback(undefined);
-      afterCallback();
-    });
-}
-
-export function checkIncomingMail(callback) {
-  callDna('check_incoming_mail', undefined).then(result => callback(result));
-}
-
-export function checkIncomingAck(callback) {
-  callDna('check_incoming_ack', undefined).then(result => callback(result));
-}
-
-export function acknowledgeMail(mailAddress, callback) {
-  callDna('acknowledge_mail', mailAddress).then(result => callback(result));
-}
-
-export function hasMailBeenReceived(mailAddress, callback) {
-  callDna('has_mail_been_received', mailAddress).then(result => callback(result));
-}
-
-export function hasAckBeenReceived(mailAddress, callback) {
-  callDna('has_ack_been_received', mailAddress).then(result => callback(result));
-}
-
-// -- File -- //
-
-export function writeManifest(dataHash, filename, filetype, orig_filesize, chunks, callback, signalCallback) {
-  const params = {
-    data_hash: dataHash,
-    filename, filetype, orig_filesize,
-    chunks
-  }
-  callDna('write_manifest', params, signalCallback).then(result => callback(result));
-}
-
-export function writeChunk(dataHash, chunkIndex, chunk, callback, signalCallback) {
-  const params = {
-    data_hash: dataHash,
-    chunk_index: chunkIndex,
-    chunk
-  }
-  callDna('write_chunk', params, signalCallback).then(result => callback(result));
-}
-
-export function getChunk(chunkAddress, callback, signalCallback) {
-  callDna('get_chunk', chunkAddress, signalCallback).then(result => callback(result));
-}
-
-export function getManifest(manifestAddress, callback, signalCallback) {
-  callDna('get_manifest', manifestAddress, signalCallback).then(result => callback(result));
-}
-
-export function findManifest(dataHash, callback, signalCallback) {
-  callDna('find_manifest', dataHash, signalCallback).then(result => callback(result));
-}
-
-export function getAllManifests(callback, signalCallback) {
-  callDna('get_all_manifests', undefined, signalCallback).then(result => callback(result));
-}
-
-export function getMissingAttachments(from, inMailAddress, callback, signalCallback) {
-  callDna('get_missing_attachments', {from, inmail_address: inMailAddress}, signalCallback).then(result => callback(result));
-}
-
-
 export function parseZomeCallPath (zomeCallPath) {
   const [zomeFunc, zome, instanceId] = zomeCallPath.split('/').reverse()
 
@@ -272,8 +145,5 @@ export function parseZomeCallPath (zomeCallPath) {
 
 export function createZomeCall (zomeCallPath, callOpts = {}) {
   const { instanceId, zome, zomeFunc } = parseZomeCallPath(zomeCallPath)
-  console.log('get_book', instanceId, zome, zomeFunc)
-  // if (zomeFunc === "get_book") {
-    return callDna(zomeFunc, callOpts)
-  // }
+  return callDna(zome, zomeFunc, callOpts)
 }
