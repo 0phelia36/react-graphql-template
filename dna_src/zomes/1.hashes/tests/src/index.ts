@@ -4,7 +4,7 @@ import path from "path";
 const conductorConfig = Config.gen();
 
 // Construct proper paths for your DNAs
-const exercise = path.join(__dirname, "../../workdir/exercise.dna");
+const exercise = path.join(__dirname, "../../hashes.dna");
 
 // create an InstallAgentsHapps array with your DNAs to tell tryorama what
 // to install into the conductor.
@@ -22,7 +22,7 @@ const sleep = (ms) =>
 const orchestrator = new Orchestrator();
 
 orchestrator.registerScenario(
-  "add and retrieve a book",
+  "add and retrieve notes",
   async (s, t) => {
     const [alice] = await s.players([conductorConfig]);
 
@@ -32,7 +32,7 @@ orchestrator.registerScenario(
 
     let entryHash = await alice_common.cells[0].call(
       "exercise",
-      "add_book",
+      "create_note",
       {
         title: "Sovereign Accountable Commons",
         content: "A Sovereign Accountable Commons (SAC) is akin to idea of a Decentralized Autonomous Organizations (DAO) on Ethereum but the underlying technology is fundamentally different, as SACs are built on Ceptr and Holochain. http://ceptr.org/projects/sovereign",
@@ -40,15 +40,15 @@ orchestrator.registerScenario(
     );
 
     t.ok(entryHash, "test add book");
-
+      
     // add your test here
-    let book = await alice_common.cells[0].call(
+    let books = await alice_common.cells[0].call(
       "exercise", // name of zome
-      "get_book", // function to call
-      entryHash // value to pass to the function
+      "list_notes", // function to call
+      undefined
     );
-    t.ok(book, "test get book"); // tape test assertion
-    console.log(entryHash)
+    t.ok(books, "test get book"); // tape test assertion
+    console.log(books)
   }
 );
 
