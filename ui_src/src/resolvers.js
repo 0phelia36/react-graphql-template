@@ -27,7 +27,7 @@ export const resolvers = {
       dnaToUiNote(await createZomeCall('/notes/notes/update_note', noteInput)),
 
     removeNote: async (_, { id }) =>
-      dnaToUiNote(await createZomeCall('/notes/notes/remove_note')({ id }))
+      dnaToUiNote(await createZomeCall('/notes/notes/remove_note', id)),
   }
 }
 
