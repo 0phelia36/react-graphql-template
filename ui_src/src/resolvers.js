@@ -9,9 +9,6 @@ function dnaToUiNote (noteResult) {
 
 export const resolvers = {
   Query: {
-    getExampleNote: async () =>{ console.log("getExampleNote resolver")
-      return await createZomeCall('/notes/notes/get_book', {title: "ascd", content: "sad"})},
-
     getNote: async (_, { id }) =>
       dnaToUiNote(await createZomeCall('/notes/notes/get_note')),
 

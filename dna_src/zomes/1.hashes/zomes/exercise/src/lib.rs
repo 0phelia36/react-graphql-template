@@ -36,15 +36,6 @@ pub fn add_book(input: SomeExternalInput) -> ExternResult<EntryHashB64> {
 }
 
 #[hdk_extern]
-pub fn get_book(_hash: SomeExternalInput) -> ExternResult<Book> {
-    // let element: Element = get(EntryHash::from(hash), GetOptions::default())?
-    //     .ok_or(WasmError::Guest(String::from("Could not find book")))?;
-    // let bookoption: Option<Book> = element.entry().to_app_option()?;
-    // let book: Book = bookoption.unwrap();
-    Ok(Book {title: "a".to_string(), content: "b".to_string()})
-}
-
-#[hdk_extern]
 pub fn create_note(input: SomeExternalInput) -> ExternResult<Book> {
     let book: Book = Book {
         title: input.title,

@@ -27,7 +27,6 @@ input UpdateNoteInput {
 type Query {
   getNote(id: String): Note
   listNotes: [Note]
-  getExampleNote: Thing
 }
 
 type Mutation {
