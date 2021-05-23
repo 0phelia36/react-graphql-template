@@ -13,7 +13,13 @@ type Thing {
   content: String
 }
 
-input NoteInput {
+input CreateNoteInput {
+  title: String
+  content: String
+}
+
+input UpdateNoteInput {
+  id: String
   title: String
   content: String
 }
@@ -25,8 +31,8 @@ type Query {
 }
 
 type Mutation {
-  createNote(noteInput: NoteInput): Note
-  updateNote(id: String, noteInput: NoteInput): Note
+  createNote(noteInput: CreateNoteInput): Note
+  updateNote(noteInput: UpdateNoteInput): Note
   removeNote(id: String): Note
 }
 `

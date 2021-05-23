@@ -274,6 +274,6 @@ export function createZomeCall (zomeCallPath, callOpts = {}) {
   const { instanceId, zome, zomeFunc } = parseZomeCallPath(zomeCallPath)
   console.log('get_book', instanceId, zome, zomeFunc)
   // if (zomeFunc === "get_book") {
-    return callDna(zomeFunc, "asd")
+    return callDna(zomeFunc, callOpts)
   // }
 }

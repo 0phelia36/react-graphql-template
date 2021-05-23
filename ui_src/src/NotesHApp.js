@@ -24,7 +24,7 @@ function NotesHApp () {
     <h1>Notes hApp</h1>
 
     <NoteForm
-      formAction={({ noteInput }) => refetch()}
+      formAction={({ noteInput }) => createNote({ variables: { noteInput } })}
       formTitle='Create Note' />
   {JSON.stringify(listNotes)}
   {JSON.stringify(data)}
@@ -49,7 +49,7 @@ function NoteRow ({ note, editingNoteId, setEditingNoteId, updateNote, removeNot
       note={note}
       formTitle='Update Note'
       setEditingNoteId={setEditingNoteId}
-      formAction={({ id, noteInput }) => updateNote({ variables: { id, noteInput } })} />
+      formAction={({ id, noteInput }) => updateNote({ variables: {noteInput: { id, ...noteInput } }})} />
   }
 
   return <NoteCard note={note} setEditingNoteId={setEditingNoteId} removeNote={removeNote} />

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  mutation CreateNote($noteInput: NoteInput) {
+  mutation CreateNote($noteInput: CreateNoteInput) {
     createNote (noteInput: $noteInput) {
       id
       createdAt 
