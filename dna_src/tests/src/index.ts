@@ -39,16 +39,16 @@ orchestrator.registerScenario(
       }
     );
 
-    t.ok(entryHash, "test add book");
+    t.ok(entryHash, "test add note");
       
     // add your test here
-    let books = await alice_common.cells[0].call(
+    let notes = await alice_common.cells[0].call(
       "exercise", // name of zome
       "list_notes", // function to call
       undefined
     );
-    t.ok(books, "test get book"); // tape test assertion
-    console.log(books)
+    t.ok(notes, "test get note"); // tape test assertion
+    console.log(notes)
   }
 );
 

@@ -1,5 +1,5 @@
 use hdk::prelude::*;
-use holo_hash::{EntryHashB64, HeaderHashB64};
+use holo_hash::{HeaderHashB64};
 use hc_utils::*;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -8,47 +8,35 @@ pub struct SomeExternalInput {
     content: String,
 }
 
-#[hdk_entry(id = "book")]
-pub struct Book {
+#[hdk_entry(id = "note")]
+pub struct Note {
     title: String,
     content: String,
 }
 
-#[hdk_entry(id = "bookentry")]
-pub struct BookEntry {
+#[hdk_entry(id = "noteentry")]
+pub struct NoteEntry {
     id: HeaderHashB64,
     title: String,
     content: String,
 }
 
-entry_defs![Path::entry_def(), Book::entry_def(), BookEntry::entry_def()];
+entry_defs![Path::entry_def(), Note::entry_def(), NoteEntry::entry_def()];
 
 #[hdk_extern]
-pub fn add_book(input: SomeExternalInput) -> ExternResult<EntryHashB64> {
-    let book: Book = Book {
+pub fn create_note(input: SomeExternalInput) -> ExternResult<Note> {
+    let note: Note = Note {
         title: input.title,
         content: input.content,
     };
-    let _a: HeaderHash = create_entry(&book)?;
-    let x: EntryHash = hash_entry(&book)?;
-    
-    Ok(EntryHashB64::from(x))
-}
-
-#[hdk_extern]
-pub fn create_note(input: SomeExternalInput) -> ExternResult<Book> {
-    let book: Book = Book {
-        title: input.title,
-        content: input.content,
-    };
-    let _a: HeaderHash = create_entry(&book)?;
-    let x: EntryHash = hash_entry(&book)?;
+    let _a: HeaderHash = create_entry(&note)?;
+    let x: EntryHash = hash_entry(&note)?;
     let notes_path = Path::from("notes");
     notes_path.ensure()?;
 
     create_link(notes_path.hash()?, x.clone(), ())?;
 
-    Ok(book)
+    Ok(note)
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -60,7 +48,7 @@ pub struct UpdateNoteInput {
 
 #[hdk_extern]
 pub fn update_note(input: UpdateNoteInput) -> ExternResult<HeaderHash> {
-    update_entry(input.id.into(), Book{ title: input.title, content: input.content})
+    update_entry(input.id.into(), Note{ title: input.title, content: input.content})
 }
 
 #[hdk_extern]
@@ -69,9 +57,9 @@ pub fn remove_note(id: HeaderHashB64) -> ExternResult<HeaderHash> {
 }
 
 #[hdk_extern]
-pub fn list_notes(_: ()) -> ExternResult<Vec<BookEntry>> {
+pub fn list_notes(_: ()) -> ExternResult<Vec<NoteEntry>> {
     let note_links = get_links(Path::from("notes").hash()?, None)?;
-    let mut notes : Vec<BookEntry> = Vec::new();
+    let mut notes : Vec<NoteEntry> = Vec::new();
 
     for link in note_links.into_inner() {
         match _get_note(link.target.into_hash()) {
@@ -83,9 +71,9 @@ pub fn list_notes(_: ()) -> ExternResult<Vec<BookEntry>> {
     Ok(notes)
 }
 
-fn _get_note(entry_hash: EntryHash) -> ExternResult<BookEntry> {
+fn _get_note(entry_hash: EntryHash) -> ExternResult<NoteEntry> {
 
-    let entry: Book = match get_latest_entry(entry_hash.clone(), Default::default()) {
+    let entry: Note = match get_latest_entry(entry_hash.clone(), Default::default()) {
         Ok(e) => Ok(e.try_into()?),
         _ => Err (WasmError::Guest(String::from("Entry Not Found")))
     }?;
@@ -95,5 +83,5 @@ fn _get_note(entry_hash: EntryHash) -> ExternResult<BookEntry> {
         _ => Err (WasmError::Guest(String::from("Header Not Found")))
     }?;
 
-    Ok(BookEntry { id: header,  title: entry.title, content: entry.content})
+    Ok(NoteEntry { id: header,  title: entry.title, content: entry.content})
 }
