@@ -10,11 +10,9 @@ import REMOVE_NOTE_MUTATION from './graphql/removeNoteMutation'
 import './NotesHApp.css'
 
 function NotesHApp () {
-  const { data, refetch } = useQuery(EXAMPLE_QUERY)
   const { data: { listNotes } = { listNotes: [] } } = useQuery(LIST_NOTES_QUERY)
-  console.log("AAA", data)
   const [createNote] = useMutation(CREATE_NOTE_MUTATION, { refetchQueries: [{ query: LIST_NOTES_QUERY }] })
-  const [updateNote] = useMutation(UPDATE_NOTE_MUTATION)
+  const [updateNote] = useMutation(UPDATE_NOTE_MUTATION, { refetchQueries: [{ query: LIST_NOTES_QUERY }] })
   const [removeNote] = useMutation(REMOVE_NOTE_MUTATION, { refetchQueries: [{ query: LIST_NOTES_QUERY }] })
 
   // the id of the note currently being edited
@@ -26,8 +24,6 @@ function NotesHApp () {
     <NoteForm
       formAction={({ noteInput }) => createNote({ variables: { noteInput } })}
       formTitle='Create Note' />
-  {JSON.stringify(listNotes)}
-  {JSON.stringify(data)}
     <div className='note-list'>
       {listNotes.map(note =>
         <NoteRow
