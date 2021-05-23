@@ -5,7 +5,7 @@ const DEFAULT_TIMEOUT = 9999
 
 const HREF_PORT = window.location.port
 var ADMIN_PORT = 1234
-var APP_ID = 'hashes'
+var APP_ID = 'notes'
 var APP_PORT = 8080 + 800
 export var NETWORK_ID = ''
 

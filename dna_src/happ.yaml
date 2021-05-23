@@ -1,8 +1,8 @@
 ---
 manifest_version: "1"
 
-name: hashes
-description: hashes
+name: notes
+description: notes
 
 slots:
   - id: slot-1
@@ -10,7 +10,7 @@ slots:
       strategy: create
       deferred: false
     dna:
-      bundled: ./hashes.dna
+      bundled: ./notes.dna
       uuid: ~
       properties: ~
       clone_limit: 0

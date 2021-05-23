@@ -14,6 +14,6 @@ echo " ****HOLOCHAIN-GYM BUILDING ZOME ****"
 # compile your rust code into a wasm binary
 CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
 
-hc dna pack --output=hashes.dna workdir
+hc dna pack --output=notes.dna workdir
 
-hc app pack --output=hashes.happ .
+hc app pack --output=notes.happ .
