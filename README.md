@@ -1,8 +1,6 @@
-# hc-happ-create
+# react-graphql-template
 
-The `hc-happ-create` script is a simple dev tool that allows you to get a working Holochain app up and running as fast as possible.
-
-The script creates a simple "notes hApp" that allows you to create, edit, delete, and list notes. It includes a DNA backend and a React + GraphQL frontend. It is a minimal working Holochain app.
+This repository contains a simple "notes hApp" for holochain RSM that allows you to create, edit, delete, and list notes. It includes a DNA backend and a React + GraphQL frontend. It is a minimal working Holochain app.
 
 ## 0 - Install `nix-shell`
 
@@ -14,41 +12,34 @@ curl https://nixos.org/nix/install | sh
 
 (Note: we currently support macOS and Linux only; please see our [development environment setup guide](https://developer.holochain.org/docs/install/) to set up Linux and `nix-shell` on Windows.)
 
-## 1 - Get Holonix and enter the development environment
-
-Holonix is a full Holochain development environment built with the [Nix package manager](https://nixos.org/nix/). Download Holonix and enter the shell:
+## 1 - Enter nix-shell
 
 ```
-$ nix-shell https://holochain.love
+. ~/.nix-profile/etc/profile.d/nix.sh
+nix-shell
 ```
 
-## 2 - Run the hApp create command
+The nix-shell command will take a long time to finish the first time it is run, after that it will only take a few seconds.
+## 2 - Build the hApp and install dependencies 
 
-From within the `nix-shell` environment, first create a directory for all your Holochain projects (if you haven't already). You can create it wherever you like; here's a recommended setup:
-
-```
-$ cd ~
-$ mkdir Holochain
-$ cd Holochain
-```
-
-Then run this command:
+From within the `nix-shell` environment, run the following commands:
 
 ```
-$ hc-happ-create my-project-name
+yarn install
+yarn hc:build
 ```
 
-This will create a new directory for your project, download all the dependencies and development tools, and create the hApp source code. This will take some time.
+This downloads all the dependencies for the frontend, and create the hApp source code. This will take some time.
 
 ## 3 - Start your new hApp!
 
-Once it's complete, go into the new project directory and run this command:
+Once that's complete, run this command to start up the hApp:
 
 ```
-$ yarn start
+yarn hc:start
 ```
 
-The first time the Holochain conductor runs there may be some additional compilation, so it might take a little while. When it's done, a browser page should open to the notes hApp. If it doesn't, you can browse to http://localhost:5200 to use the hApp.
+The first time the Holochain conductor runs there may be some additional compilation, so it might take a little while. When it's done, a browser page should open to the notes hApp. If it doesn't, you can browse to http://localhost:3000 to use the hApp.
 
 The conductor and the UI server run in the foreground, so you can stop them by pressing `Ctrl`+`C`.
 `$ npm start`
