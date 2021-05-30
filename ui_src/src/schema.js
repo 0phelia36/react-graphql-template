@@ -8,10 +8,6 @@ type Note {
   title: String
   content: String
 }
-type Thing {
-  title: String
-  content: String
-}
 
 input CreateNoteInput {
   title: String
