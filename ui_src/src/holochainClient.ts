@@ -15,7 +15,7 @@ if (HREF_PORT === "") {
   APP_ID = 'snapmail-app'
   ADMIN_PORT = 1235
   let searchParams = new URLSearchParams(window.location.search);
-  APP_PORT = searchParams.get("APP");
+  APP_PORT = parseInt(searchParams.get("APP"));
   NETWORK_ID = searchParams.get("UID");
   console.log({APP_ID})
 }
@@ -105,13 +105,12 @@ const dumpState = async (cellId) => {
  *
  * @returns {Promise<any>}
  */
-export async function callDna(zomeName, functionName, payload, timeout) {
+export async function callDna(zomeName, functionName, payload, timeout = DEFAULT_TIMEOUT) {
     if (g_appClient === undefined) {
       console.error("App Client Websocket not connected!")
       return Promise.reject("App Client Websocket not connected!")
     }
-    const t = timeout !== undefined? timeout : DEFAULT_TIMEOUT;
-    console.log("*** callDna() => " + functionName + '() ; timeout = ' + t)
+    console.log("*** callDna() => " + functionName + '() ; timeout = ' + timeout)
   let result = undefined;
   try
   {
@@ -123,7 +122,7 @@ export async function callDna(zomeName, functionName, payload, timeout) {
         provenance: g_cellId[1],
         payload: payload
       },
-      t
+      timeout
     )
   } catch(err) {
     console.error("*** callDna() => " + functionName + '() failed:')

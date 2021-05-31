@@ -59,7 +59,7 @@ function NoteCard ({ note: { id, title, content }, setEditingNoteId, removeNote 
   </div>
 }
 
-function NoteForm ({ note = { title: '', content: '' }, formTitle, formAction, setEditingNoteId = () => {} }) {
+function NoteForm ({ note = { id:'', title: '', content: '' }, formTitle, formAction, setEditingNoteId = () => {} }) {
   const [formState, setFormState] = useState(pick(['title', 'content'], note))
   const { title, content } = formState
   const { id } = note
@@ -83,12 +83,12 @@ function NoteForm ({ note = { title: '', content: '' }, formTitle, formAction, s
         ...formState
       }
     })
-    setEditingNoteId(null)
+    setEditingNoteId()
     clearForm()
   }
 
   const onCancel = () => {
-    setEditingNoteId(null)
+    setEditingNoteId()
     clearForm()
   }
 
@@ -100,7 +100,7 @@ function NoteForm ({ note = { title: '', content: '' }, formTitle, formAction, s
     </div>
     <div className='form-row'>
       <label htmlFor='content'>Content</label>
-      <textarea id='content' name='content' value={content} onChange={setField('content')} rows='6' />
+      <textarea id='content' name='content' value={content} onChange={setField('content')} rows={6} />
     </div>
     <div>
       <button onClick={onSubmit}>Submit</button>

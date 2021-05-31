@@ -11,7 +11,7 @@ import * as serviceWorker from './serviceWorker'
 function HApp () {
   const [connected, setConnected] = useState(false);
 
-  rsmConnectApp().then( async (cellId) => {
+  rsmConnectApp(() => {}).then( async (cellId) => {
     setConnected(true)
     console.log("Connected!")
   }
